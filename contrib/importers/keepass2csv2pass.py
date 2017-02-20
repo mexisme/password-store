@@ -12,6 +12,7 @@
 
 import csv
 import itertools
+import re
 import sys
 from subprocess import Popen, PIPE
 
@@ -37,10 +38,11 @@ def prepareForInsertion(row, baseDir):
         data = []
         path = []
 
-        keyFolder = escape(row[0][4:])
-        keyName = escape(row[1])
+        keyFolder = escape(row[0])
+        #keyFolder = escape(escapeSlash(row[0][4:]))
+        keyName = escape(escapeSlash(row[1]))
 
-        for pathItem in (keyFolder, keyName, baseDir):
+        for pathItem in (keyName, keyFolder, baseDir):
                 if pathItem:
                         path.insert(0, pathItem)
         path = "/".join(path)
@@ -79,13 +81,22 @@ def prepareForInsertion(row, baseDir):
 
 def escape(strToEscape):
         """ escape the list """
-        return strToEscape.replace(" ", "-").replace("&","and").replace("[","").replace("]","")
+        strToEscape = escapeAmpersand(escapeDash(strToEscape))
+        return strToEscape.replace(" ", "-").replace("[", "").replace("]", "")
 
+def escapeDash(strToEscape):
+        return re.sub(r'\s+-+\s+', "--", strToEscape)
+
+def escapeAmpersand(strToEscape):
+        return re.sub(r'\s*\&+\s*', " and ", strToEscape)
+
+def escapeSlash(strToEscape):
+        return re.sub(r'\s*/+\s*', " or ", strToEscape)
 
 def main(argv):
         baseDir = ""
         inputFile = sys.argv[1]
-        if len(sys.argv) > 1:
+        if len(sys.argv) > 2:
                 baseDir = sys.argv[2]
         print("File to read: " + inputFile)
         readFile(inputFile, baseDir)
