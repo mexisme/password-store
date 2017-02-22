@@ -1,0 +1,14 @@
+* Tasks
+** TODO Port to Rust or Go-lang
+   - Single binary
+   - Not reliant on bash
+   - Easily compilable / portable to several architectures
+** TODO Support for different file-formats beyond `.txt`
+   - YAML support pre-text, then the `---` divider
+     - Already mostly fits-in with the author's suggested format
+   - JSON probably wouldn't work
+   - TOML is very minimalistic and tightly specified, and indent-agnostic
+** MAYBE Index file, for obfuscating the file-names
+   - Would rely on GPG-decrypt timeouts, etc
+** MAYBE `passd`
+   - `pass` background daemon, a la `ssh-agent` or `gpg-daemon`
